@@ -31,6 +31,8 @@ export const useBroadcastChannel = <D, P>(options: UseBroadcastChannelOptions): 
 
   const channel = ref<BroadcastChannel | undefined>()
   const data = ref()
+  const source = ref()
+  const origin = ref()
   const error = ref<Event | null>(null)
 
   const post = (data: unknown) => {
@@ -51,6 +53,8 @@ export const useBroadcastChannel = <D, P>(options: UseBroadcastChannelOptions): 
 
       channel.value.addEventListener('message', (e: MessageEvent) => {
         data.value = e.data
+        source.value = e.source
+        origin.value = e.origin
       }, { passive: true })
 
       channel.value.addEventListener('messageerror', (e: MessageEvent) => {
@@ -71,6 +75,8 @@ export const useBroadcastChannel = <D, P>(options: UseBroadcastChannelOptions): 
     isSupported,
     channel,
     data,
+    source,
+    origin,
     post,
     close,
     error,
@@ -82,6 +88,8 @@ export interface UseBroadcastChannelReturn<D, P> {
   isSupported: Ref<boolean>
   channel: Ref<BroadcastChannel | undefined>
   data: Ref<D>
+  source: Ref<string>
+  origin: Ref<string>
   post: (data: P) => void
   close: () => void
   error: Ref<Event | null>
